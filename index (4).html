@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pahami Kontrak — Bedah Kontrak Kerja</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f5f7fa; color: #1a1a2e; min-height: 100vh; }
+
+  nav { background: #fff; border-bottom: 1px solid #e8eaf0; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { font-size: 1.25rem; font-weight: 700; color: #2563eb; }
+  .nav-logo span { color: #1a1a2e; }
+  .nav-tag { font-size: 0.75rem; color: #64748b; background: #f1f5f9; padding: 0.3rem 0.75rem; border-radius: 99px; }
+
+  main { max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+  .hero { text-align: center; margin-bottom: 2.5rem; }
+  .hero h1 { font-size: 2rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.75rem; }
+  .hero h1 span { color: #2563eb; }
+  .hero p { color: #64748b; font-size: 0.95rem; line-height: 1.6; max-width: 480px; margin: 0 auto; }
+
+  /* PROFILE */
+  .profile-section { background: #fff; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .profile-label { font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
+  .profile-options { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .profile-btn { padding: 0.5rem 1rem; border-radius: 99px; border: 1.5px solid #e2e8f0; background: #f8fafc; font-family: inherit; font-size: 0.82rem; font-weight: 500; color: #64748b; cursor: pointer; transition: all 0.15s; }
+  .profile-btn:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+  .profile-btn.active { background: #2563eb; border-color: #2563eb; color: #fff; }
+
+  /* COMPANY INPUT */
+  .company-section { background: #fff; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .company-label { font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 0.6rem; }
+  .company-input { width: 100%; padding: 0.65rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 10px; font-family: inherit; font-size: 0.88rem; color: #1a1a2e; outline: none; transition: border-color 0.15s; }
+  .company-input:focus { border-color: #2563eb; }
+  .company-input::placeholder { color: #94a3b8; }
+
+  /* UPLOAD */
+  .upload-card { background: #fff; border-radius: 16px; border: 2px dashed #cbd5e1; padding: 2.5rem 2rem; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; margin-bottom: 1rem; }
+  .upload-card:hover, .upload-card.drag-over { border-color: #2563eb; background: #eff6ff; }
+  .upload-card input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-icon-wrap { width: 56px; height: 56px; background: #eff6ff; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+  .upload-icon-wrap svg { color: #2563eb; }
+  .upload-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.35rem; }
+  .upload-card p { font-size: 0.82rem; color: #94a3b8; }
+
+  .file-pill { display: none; align-items: center; gap: 0.6rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 0.65rem 1rem; font-size: 0.82rem; color: #2563eb; font-weight: 500; margin-bottom: 1rem; }
+
+  /* CONSENT */
+  .consent-section { display: none; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 0.9rem 1rem; margin-bottom: 1rem; }
+  .consent-row { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .consent-toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; margin-top: 1px; }
+  .consent-toggle input { opacity: 0; width: 0; height: 0; }
+  .consent-slider { position: absolute; inset: 0; background: #cbd5e1; border-radius: 99px; cursor: pointer; transition: background 0.2s; }
+  .consent-slider:before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
+  .consent-toggle input:checked + .consent-slider { background: #2563eb; }
+  .consent-toggle input:checked + .consent-slider:before { transform: translateX(18px); }
+  .consent-text { font-size: 0.8rem; color: #92400e; line-height: 1.5; }
+  .consent-text strong { color: #78350f; }
+
+  /* PRIVACY NOTICE */
+  .privacy-note { display: none; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.8rem; color: #166534; line-height: 1.5; margin-bottom: 1rem; }
+  .privacy-note label { display: flex; align-items: flex-start; gap: 0.6rem; cursor: pointer; }
+  .privacy-note input[type="checkbox"] { margin-top: 2px; accent-color: #2563eb; flex-shrink: 0; width: 14px; height: 14px; }
+
+  .btn-analyze { display: none; width: 100%; padding: 0.9rem; background: #2563eb; color: #fff; font-family: inherit; font-size: 0.95rem; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+  .btn-analyze:hover { background: #1d4ed8; }
+  .btn-analyze:active { transform: scale(0.99); }
+  .btn-analyze:disabled { background: #93c5fd; cursor: not-allowed; }
+
+  .error-msg { display: none; background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 0.9rem 1.1rem; color: #dc2626; font-size: 0.85rem; margin-bottom: 1.5rem; }
+
+  /* LOADING */
+  .loading { display: none; background: #fff; border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+  .loading-label { font-size: 0.8rem; font-weight: 600; color: #64748b; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .progress-bar { height: 6px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-bottom: 1.25rem; }
+  .progress-fill { height: 100%; background: #2563eb; border-radius: 99px; animation: progress 2s ease-in-out infinite; }
+  @keyframes progress { 0%{width:0;margin-left:0} 50%{width:60%;margin-left:20%} 100%{width:0;margin-left:100%} }
+  .steps { display: flex; flex-direction: column; gap: 0.5rem; }
+  .step { font-size: 0.82rem; color: #94a3b8; display: flex; align-items: center; gap: 0.5rem; opacity: 0; transition: opacity 0.3s; }
+  .step.on { opacity: 1; color: #2563eb; font-weight: 500; }
+  .step::before { content: '·'; font-size: 1.2rem; }
+  .step.on::before { content: '→'; }
+
+  /* RESULTS */
+  .results { display: none; }
+
+  /* CONTRACT TYPE */
+  .contract-type-bar { background: #fff; border-radius: 12px; padding: 0.85rem 1.1rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+  .contract-badge { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 0.3rem 0.75rem; border-radius: 99px; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
+  .contract-note { font-size: 0.8rem; color: #64748b; line-height: 1.4; flex: 1; }
+
+  /* SUMMARY */
+  .summary-card { background: #fff; border-radius: 16px; padding: 1.5rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+  .risk-circle { width: 68px; height: 68px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+  .risk-circle .risk-label { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+  .risk-circle .risk-value { font-size: 0.8rem; font-weight: 700; }
+  .risk-high { background: #fef2f2; color: #dc2626; }
+  .risk-medium { background: #fffbeb; color: #d97706; }
+  .risk-low { background: #f0fdf4; color: #16a34a; }
+  .flag-count-badge { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.6rem 1rem; text-align: center; flex-shrink: 0; }
+  .flag-count-badge .num { font-size: 1.5rem; font-weight: 700; color: #1a1a2e; line-height: 1; }
+  .flag-count-badge .lbl { font-size: 0.7rem; color: #94a3b8; margin-top: 0.2rem; }
+  .summary-info { flex: 1; min-width: 180px; }
+  .summary-info h3 { font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+  .summary-info p { font-size: 0.88rem; color: #475569; line-height: 1.5; }
+
+  /* INDUSTRI */
+  .industri-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 0.9rem 1.1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #166534; line-height: 1.5; }
+  .industri-card.warn { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+  .industri-card.danger { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+  .industri-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; opacity: 0.7; }
+
+  /* SECTION */
+  .section { margin-bottom: 1.5rem; }
+  .section-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .section-head h2 { font-size: 0.85rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; }
+  .section-head .count { background: #e2e8f0; color: #64748b; font-size: 0.72rem; font-weight: 600; padding: 0.1rem 0.55rem; border-radius: 99px; }
+
+  /* FLAG CARDS */
+  .flag-card { background: #fff; border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 0.5rem; border-left: 4px solid; }
+  .flag-card.high { border-color: #ef4444; }
+  .flag-card.medium { border-color: #f59e0b; }
+  .flag-card.low { border-color: #22c55e; }
+  .flag-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.6rem; }
+  .flag-clause { font-size: 0.72rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+  .sev-tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 6px; flex-shrink: 0; }
+  .sev-tag.high { background: #fef2f2; color: #dc2626; }
+  .sev-tag.medium { background: #fffbeb; color: #d97706; }
+  .sev-tag.low { background: #f0fdf4; color: #16a34a; }
+  .flag-issue { font-size: 0.88rem; color: #1e293b; line-height: 1.55; margin-bottom: 0.6rem; }
+  .flag-ref { font-size: 0.72rem; color: #94a3b8; margin-bottom: 0.75rem; }
+
+  /* EXPANDABLE */
+  .flag-details { border-top: 1px solid #f1f5f9; padding-top: 0.75rem; margin-top: 0.25rem; }
+  .detail-row { margin-bottom: 0.75rem; }
+  .detail-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 0.3rem; }
+  .detail-label.danger { color: #dc2626; }
+  .detail-text { font-size: 0.83rem; color: #334155; line-height: 1.5; }
+  .detail-text.redline { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.6rem 0.8rem; color: #166534; }
+  .detail-text.acceptable { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.6rem 0.8rem; color: #1e40af; }
+  .detail-text.not-acceptable { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 0.6rem 0.8rem; color: #991b1b; }
+  .toggle-btn { background: none; border: none; cursor: pointer; font-size: 0.75rem; font-weight: 600; color: #2563eb; font-family: inherit; padding: 0; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.3rem; }
+  .toggle-btn:hover { color: #1d4ed8; }
+
+  /* QUESTION CARDS */
+  .q-card { background: #fff; border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 0.5rem; display: flex; gap: 1rem; align-items: flex-start; }
+  .q-num { width: 28px; height: 28px; border-radius: 8px; background: #eff6ff; color: #2563eb; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .q-body { flex: 1; }
+  .q-text { font-size: 0.88rem; color: #1e293b; line-height: 1.55; margin-bottom: 0.3rem; font-weight: 500; }
+  .q-why { font-size: 0.78rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0.5rem; }
+  .q-answer { font-size: 0.8rem; line-height: 1.4; border-radius: 8px; padding: 0.5rem 0.75rem; margin-top: 0.4rem; }
+  .q-answer.ok { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+  .q-answer.bad { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+  .q-answer-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.2rem; }
+  .q-answer.ok .q-answer-label { color: #3b82f6; }
+  .q-answer.bad .q-answer-label { color: #dc2626; }
+
+  /* SAVED BADGE */
+  .saved-badge { display: none; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 0.65rem 1rem; font-size: 0.8rem; color: #166534; margin-bottom: 1rem; text-align: center; }
+
+  .btn-reset { width: 100%; margin-top: 0.5rem; padding: 0.8rem; background: #f1f5f9; color: #64748b; font-family: inherit; font-size: 0.88rem; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+  .btn-reset:hover { background: #e2e8f0; color: #475569; }
+  .empty { text-align: center; padding: 2rem; color: #94a3b8; font-size: 0.85rem; background: #fff; border-radius: 12px; }
+
+  /* DISCLAIMER */
+  .disclaimer { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.75rem; color: #94a3b8; line-height: 1.5; margin-top: 1rem; text-align: center; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Pahami<span>Kontrak</span></div>
+  <span class="nav-tag">Bedah Kontrak Kerja · AI</span>
+</nav>
+
+<main>
+  <div class="hero">
+    <h1>Jangan TTD dulu<br><span>sebelum baca ini</span></h1>
+    <p>Upload kontrak kerjamu, kita bedah bareng — biar kamu tau apa yang harus ditanyain ke HRD sebelum terlanjur tanda tangan.</p>
+  </div>
+
+  <!-- Profile Selector -->
+  <div class="profile-section">
+    <div class="profile-label">👤 Siapa kamu? <span style="color:#94a3b8;font-weight:400">(mempengaruhi analisis severity)</span></div>
+    <div class="profile-options">
+      <button class="profile-btn active" data-value="fresh_grad">🎓 Fresh Grad</button>
+      <button class="profile-btn" data-value="experienced">💼 Karyawan</button>
+      <button class="profile-btn" data-value="freelancer">🛠 Freelancer</button>
+      <button class="profile-btn" data-value="executive">👔 Eksekutif</button>
+    </div>
+  </div>
+
+  <!-- Company Name -->
+  <div class="company-section">
+    <div class="company-label">🏢 Nama perusahaan <span style="color:#94a3b8;font-weight:400">(opsional — untuk database kontrak fair)</span></div>
+    <input class="company-input" id="companyInput" type="text" placeholder="Contoh: PT Maju Bersama">
+  </div>
+
+  <!-- Upload -->
+  <div class="upload-card" id="uploadZone">
+    <input type="file" id="fileInput" accept=".pdf">
+    <div class="upload-icon-wrap">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+    </div>
+    <h3>Klik atau drag PDF ke sini</h3>
+    <p>Hanya file PDF digital · Maksimal 10MB</p>
+  </div>
+
+  <div class="file-pill" id="filePill">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+      <polyline points="14,2 14,8 20,8"/>
+    </svg>
+    <span id="fileName">—</span>
+  </div>
+
+  <!-- Consent Toggle -->
+  <div class="consent-section" id="consentSection">
+    <div class="consent-row">
+      <label class="consent-toggle">
+        <input type="checkbox" id="consentToggle" checked>
+        <span class="consent-slider"></span>
+      </label>
+      <div class="consent-text">
+        <strong>Bantu user lain</strong> — simpan data kontrak ini secara anonim untuk membantu pencari kerja lain menilai perusahaan. PDF kamu <strong>tidak disimpan</strong>, hanya hasil analisisnya.
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Checkbox -->
+  <div class="privacy-note" id="privacyNote">
+    <label>
+      <input type="checkbox" id="privacyCheck" onchange="toggleAnalyzeBtn()">
+      <span>Saya memahami ini adalah kontrak milik saya sendiri dan analisis ini bukan nasihat hukum profesional.</span>
+    </label>
+  </div>
+
+  <button class="btn-analyze" id="analyzeBtn" onclick="analyze()">Analisis Sekarang</button>
+  <div class="error-msg" id="errorMsg"></div>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="loading-label">Sedang menganalisis...</div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+    <div class="steps">
+      <div class="step" id="s1">Mengekstrak teks dari PDF</div>
+      <div class="step" id="s2">Mendeteksi jenis kontrak (PKWT/PKWTT)</div>
+      <div class="step" id="s3">Mengidentifikasi red flags</div>
+      <div class="step" id="s4">Menyusun rekomendasi & pertanyaan HRD</div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+
+    <div class="saved-badge" id="savedBadge">✅ Data kontrak ini tersimpan secara anonim — terima kasih sudah bantu komunitas!</div>
+
+    <!-- Contract Type -->
+    <div class="contract-type-bar" id="contractTypeBar" style="display:none">
+      <span class="contract-badge" id="contractBadge">—</span>
+      <span class="contract-note" id="contractNote">—</span>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary-card">
+      <div class="risk-circle" id="riskCircle">
+        <div class="risk-label">Risk</div>
+        <div class="risk-value" id="riskValue">—</div>
+      </div>
+      <div class="flag-count-badge">
+        <div class="num" id="flagNum">0</div>
+        <div class="lbl">Red Flags</div>
+      </div>
+      <div class="summary-info">
+        <h3>Kesimpulan</h3>
+        <p id="summaryNote">—</p>
+      </div>
+    </div>
+
+    <!-- Industri -->
+    <div class="industri-card" id="industriCard" style="display:none">
+      <div class="industri-label">📊 Dibanding Standar Industri</div>
+      <div id="industriText">—</div>
+    </div>
+
+    <!-- Red Flags -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Red Flags</h2>
+        <span class="count" id="flagCount">0</span>
+      </div>
+      <div id="flagsList"></div>
+    </div>
+
+    <!-- Questions -->
+    <div class="section">
+      <div class="section-head">
+        <h2>Tanyakan ke HRD Sebelum TTD</h2>
+        <span class="count" id="qCount">0</span>
+      </div>
+      <div id="qList"></div>
+    </div>
+
+    <div class="disclaimer">⚠️ Hasil analisis ini bukan nasihat hukum profesional. Untuk keputusan penting, konsultasikan dengan konsultan hukum ketenagakerjaan.</div>
+    <button class="btn-reset" onclick="reset()">← Analisis Kontrak Lain</button>
+  </div>
+</main>
+
+<script>
+  const API = 'https://baca-dulu-2-production.up.railway.app/analyze';
+  const fileInput  = document.getElementById('fileInput');
+  const filePill   = document.getElementById('filePill');
+  const analyzeBtn = document.getElementById('analyzeBtn');
+  const uploadZone = document.getElementById('uploadZone');
+  let selectedFile = null;
+
+  // Profile selector
+  let selectedProfile = 'fresh_grad';
+  document.querySelectorAll('.profile-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.profile-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedProfile = btn.dataset.value;
+    });
+  });
+
+  // Drag & drop
+  uploadZone.addEventListener('dragover', ev => { ev.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', ev => {
+    ev.preventDefault(); uploadZone.classList.remove('drag-over');
+    const f = ev.dataTransfer.files[0];
+    if (f?.type === 'application/pdf') setFile(f);
+  });
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) setFile(fileInput.files[0]); });
+
+  function setFile(f) {
+    selectedFile = f;
+    document.getElementById('fileName').textContent = f.name;
+    filePill.style.display = 'flex';
+    document.getElementById('consentSection').style.display = 'block';
+    document.getElementById('privacyNote').style.display = 'block';
+    document.getElementById('privacyCheck').checked = false;
+    analyzeBtn.style.display = 'none';
+  }
+
+  function toggleAnalyzeBtn() {
+    analyzeBtn.style.display = document.getElementById('privacyCheck').checked ? 'block' : 'none';
+  }
+
+  async function analyze() {
+    if (!selectedFile) return;
+    analyzeBtn.disabled = true;
+    document.getElementById('errorMsg').style.display = 'none';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    ['s1','s2','s3','s4'].forEach((id,i) => setTimeout(() => document.getElementById(id).classList.add('on'), i*900));
+
+    const consentSave = document.getElementById('consentToggle').checked;
+    const companyName = document.getElementById('companyInput').value.trim();
+
+    try {
+      const fd = new FormData();
+      fd.append('file', selectedFile);
+      fd.append('user_profile', selectedProfile);
+      fd.append('company_name', companyName);
+      fd.append('consent_save', consentSave ? 'true' : 'false');
+
+      const res = await fetch(API, { method: 'POST', body: fd });
+      if (!res.ok) { const err = await res.json(); throw new Error(err.detail || 'Gagal'); }
+      render(await res.json(), consentSave);
+    } catch(err) {
+      const em = document.getElementById('errorMsg');
+      em.textContent = '⚠ ' + (err.message || 'Terjadi kesalahan.');
+      em.style.display = 'block';
+    } finally {
+      document.getElementById('loading').style.display = 'none';
+      analyzeBtn.disabled = false;
+      ['s1','s2','s3','s4'].forEach(id => document.getElementById(id).classList.remove('on'));
+    }
+  }
+
+  function render(data, consentSave) {
+    const red_flags = data.red_flags || [];
+    const questions = data.questions_for_hrd || [];
+
+    // Saved badge
+    const savedBadge = document.getElementById('savedBadge');
+    savedBadge.style.display = consentSave ? 'block' : 'none';
+
+    // Contract type
+    if (data.contract_type) {
+      document.getElementById('contractBadge').textContent = '📋 ' + data.contract_type;
+      document.getElementById('contractNote').textContent = data.contract_type_note || '';
+      document.getElementById('contractTypeBar').style.display = 'flex';
+    } else {
+      document.getElementById('contractTypeBar').style.display = 'none';
+    }
+
+    // Risk
+    const risk = (data.risk_level || 'low').toLowerCase();
+    const rc = document.getElementById('riskCircle');
+    rc.className = 'risk-circle risk-' + risk;
+    document.getElementById('riskValue').textContent = risk==='high'?'Tinggi':risk==='medium'?'Sedang':'Aman';
+    document.getElementById('flagNum').textContent = data.red_flag_count ?? red_flags.length;
+    document.getElementById('summaryNote').textContent = data.summary || '—';
+
+    // Industri
+    const ic = document.getElementById('industriCard');
+    if (data.industry_comparison) {
+      document.getElementById('industriText').textContent = data.industry_comparison;
+      ic.className = 'industri-card' + (risk==='high'?' danger':risk==='medium'?' warn':'');
+      ic.style.display = 'block';
+    } else {
+      ic.style.display = 'none';
+    }
+
+    // Red flags
+    document.getElementById('flagCount').textContent = red_flags.length;
+    document.getElementById('flagsList').innerHTML = red_flags.length === 0
+      ? '<div class="empty">Tidak ditemukan red flag yang signifikan 🎉</div>'
+      : red_flags.map((f, idx) => {
+          const s = (f.severity || 'low').toLowerCase();
+          const hasDetails = f.should_be || f.redline_suggestion || f.hrd_answer_acceptable || f.hrd_answer_not_acceptable;
+          return `<div class="flag-card ${s}">
+            <div class="flag-top">
+              <div class="flag-clause">${e(f.clause_text||'—')}</div>
+              <span class="sev-tag ${s}">${s==='high'?'Tinggi':s==='medium'?'Sedang':'Rendah'}</span>
+            </div>
+            <div class="flag-issue">${e(f.problem||'—')}</div>
+            ${f.profile_context ? `<div class="flag-ref" style="color:#64748b;margin-bottom:0.5rem">💡 ${e(f.profile_context)}</div>` : ''}
+            ${f.legal_reference && f.legal_reference!=='null' ? `<div class="flag-ref">📌 ${e(f.legal_reference)}</div>` : ''}
+            ${f.confidence === 'low' ? `<div style="display:inline-flex;align-items:center;gap:0.4rem;background:#fef9c3;border:1px solid #fde047;border-radius:6px;padding:0.25rem 0.6rem;font-size:0.72rem;font-weight:600;color:#854d0e;margin-bottom:0.5rem">⚠️ Perlu verifikasi lawyer — ${e(f.confidence_note||'')}</div>` : ''}
+            ${f.confidence === 'medium' ? `<div style="display:inline-flex;align-items:center;gap:0.4rem;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;padding:0.25rem 0.6rem;font-size:0.72rem;font-weight:600;color:#475569;margin-bottom:0.5rem">💬 Tergantung konteks — ${e(f.confidence_note||'')}</div>` : ''}
+            ${hasDetails ? `
+              <div class="flag-details" id="detail-${idx}" style="display:none">
+                ${f.should_be ? `<div class="detail-row"><div class="detail-label">✅ Seharusnya</div><div class="detail-text">${e(f.should_be)}</div></div>` : ''}
+                ${f.redline_suggestion ? `<div class="detail-row"><div class="detail-label">✏️ Contoh kalimat perbaikan</div><div class="detail-text redline">${e(f.redline_suggestion)}</div></div>` : ''}
+                ${f.hrd_answer_acceptable ? `<div class="detail-row"><div class="detail-label">✅ Jawaban HRD yang acceptable</div><div class="detail-text acceptable">${e(f.hrd_answer_acceptable)}</div></div>` : ''}
+                ${f.hrd_answer_not_acceptable ? `<div class="detail-row"><div class="detail-label danger">⚠️ Jawaban HRD yang TIDAK acceptable</div><div class="detail-text not-acceptable">${e(f.hrd_answer_not_acceptable)}</div></div>` : ''}
+              </div>
+              <button class="toggle-btn" onclick="toggleDetail(${idx}, this)">+ Lihat rekomendasi & redline</button>` : ''}
+          </div>`;
+        }).join('');
+
+    // Questions
+    document.getElementById('qCount').textContent = questions.length;
+    document.getElementById('qList').innerHTML = questions.length === 0
+      ? '<div class="empty">Tidak ada pertanyaan tambahan.</div>'
+      : questions.map((q, i) => `
+        <div class="q-card">
+          <div class="q-num">${String(i+1).padStart(2,'0')}</div>
+          <div class="q-body">
+            <div class="q-text">${e(q.question||'—')}</div>
+            ${q.purpose ? `<div class="q-why">${e(q.purpose)}</div>` : ''}
+            ${q.answer_acceptable ? `<div class="q-answer ok"><div class="q-answer-label">✓ Jawaban yang acceptable</div>${e(q.answer_acceptable)}</div>` : ''}
+            ${q.answer_not_acceptable ? `<div class="q-answer bad"><div class="q-answer-label">⚠ Jawaban yang TIDAK acceptable</div>${e(q.answer_not_acceptable)}</div>` : ''}
+          </div>
+        </div>`).join('');
+
+    const r = document.getElementById('results');
+    r.style.display = 'block';
+    r.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function toggleDetail(idx, btn) {
+    const el = document.getElementById('detail-' + idx);
+    const open = el.style.display !== 'none';
+    el.style.display = open ? 'none' : 'block';
+    btn.textContent = open ? '+ Lihat rekomendasi & redline' : '− Sembunyikan';
+  }
+
+  function e(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function reset() {
+    ['results','errorMsg'].forEach(id => document.getElementById(id).style.display = 'none');
+    document.getElementById('consentSection').style.display = 'none';
+    filePill.style.display = 'none';
+    document.getElementById('privacyNote').style.display = 'none';
+    document.getElementById('privacyCheck').checked = false;
+    document.getElementById('consentToggle').checked = true;
+    document.getElementById('companyInput').value = '';
+    analyzeBtn.style.display = 'none';
+    analyzeBtn.disabled = false;
+    selectedFile = null;
+    fileInput.value = '';
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+</script>
+</body>
+</html>
